@@ -42,11 +42,19 @@ router.post('/', (req, res) => {
 
 router.post('/products', (req, res) => {
   // Get all products in product collection
+  let limit = req.body.limit ? parseInt(req.body.limit) : 100; // parseInt : string to Integer
+  let skip = req.body.skip ? parseInt(req.body.skip) : 0;
   Product.find() //몽고DB에 있는 Product collection 안의 모든 정보를 찾음
     .populate('writer') // 이 사람의 모든 정보를 가져옴
+    .skip(skip)
+    .limit(limit)
     .exec((err, productInfo) => {
       if (err) return res.status(400).json({ success: false, err });
-      return res.status(200).json({ success: true, productInfo });
+      return res.status(200).json({
+        success: true,
+        productInfo,
+        postSize: productInfo.length,
+      });
     });
 });
 
