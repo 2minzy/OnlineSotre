@@ -4,12 +4,17 @@ import axios from 'axios';
 import Meta from 'antd/lib/card/Meta';
 import { Icon, Col, Card, Row, Carousel } from 'antd';
 import ImageSlider from '../../utils/ImageSlider';
-
+import Checkbox from './Sections/CheckBox';
+import { continents } from './Sections/Datas';
 function LandingPage() {
   const [Products, setProducts] = useState([]);
   const [Skip, setSkip] = useState(0);
   const [Limit, setLimit] = useState(8);
   const [PostSize, setPostSize] = useState(0);
+  const [Filters, setFilters] = useState({
+    continents: [],
+    price: [],
+  });
 
   useEffect(() => {
     let body = {
@@ -21,6 +26,7 @@ function LandingPage() {
 
   const getProducts = (body) => {
     axios.post('/api/product/products', body).then((response) => {
+      console.log(response.data);
       if (response.data.success) {
         if (body.loadMore) {
           setProducts([...Products, ...response.data.productInfo]);
@@ -40,6 +46,7 @@ function LandingPage() {
       skip: skip,
       limit: Limit,
       loadMore: true,
+      filters: Filters,
     };
     getProducts(body);
     setSkip(skip);
@@ -61,6 +68,24 @@ function LandingPage() {
     );
   });
 
+  const showFilteredResults = (filters) => {
+    let body = {
+      skip: 0,
+      limit: Limit,
+      filters: filters,
+    };
+
+    getProducts(body);
+    setSkip(0);
+  };
+
+  const handleFilters = (filters, category) => {
+    const newFilters = { ...Filters };
+    newFilters[category] = filters;
+    showFilteredResults(newFilters);
+    setFilters(newFilters);
+  };
+
   return (
     <div style={{ width: '75%', margin: '3rem auto' }}>
       <div stlye={{ textAlign: 'center' }}>
@@ -69,7 +94,12 @@ function LandingPage() {
         </h2>
       </div>
       {/* Filter */}
-
+      {/* CheckBox */}
+      <Checkbox
+        list={continents}
+        handleFilters={(filters) => handleFilters(filters, 'continents')}
+      />
+      {/* RadioBox */}
       {/* Search */}
 
       {/* Cards */}
