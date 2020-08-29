@@ -44,6 +44,7 @@ router.post('/products', (req, res) => {
   // Get all products in product collection
   let limit = req.body.limit ? parseInt(req.body.limit) : 20; // parseInt : string to Integer
   let skip = req.body.skip ? parseInt(req.body.skip) : 0;
+  let term = req.body.searchTerm;
   let findArgs = {};
   for (let key in req.body.filters) {
     if (req.body.filters[key].length > 0) {
@@ -61,18 +62,34 @@ router.post('/products', (req, res) => {
   }
 
   console.log('findArgs', findArgs);
-  Product.find(findArgs) //몽고DB에 있는 Product collection 안의 모든 정보를 찾음
-    .populate('writer') // 이 사람의 모든 정보를 가져옴
-    .skip(skip)
-    .limit(limit)
-    .exec((err, productInfo) => {
-      if (err) return res.status(400).json({ success: false, err });
-      return res.status(200).json({
-        success: true,
-        productInfo,
-        postSize: productInfo.length,
+  if (term) {
+    Product.find(findArgs)
+      .find({ $text: { $search: term } })
+      .populate('writer')
+      .skip(skip)
+      .limit(limit)
+      .exec((err, productInfo) => {
+        if (err) return res.status(400).json({ success: false, err });
+        return res.status(200).json({
+          success: true,
+          productInfo,
+          postSize: productInfo.length,
+        });
       });
-    });
+  } else {
+    Product.find(findArgs) //몽고DB에 있는 Product collection 안의 모든 정보를 찾음
+      .populate('writer') // 이 사람의 모든 정보를 가져옴
+      .skip(skip)
+      .limit(limit)
+      .exec((err, productInfo) => {
+        if (err) return res.status(400).json({ success: false, err });
+        return res.status(200).json({
+          success: true,
+          productInfo,
+          postSize: productInfo.length,
+        });
+      });
+  }
 });
 
 module.exports = router;
