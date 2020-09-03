@@ -29,7 +29,6 @@ function LandingPage() {
 
   const getProducts = (body) => {
     axios.post('/api/product/products', body).then((response) => {
-      console.log(response.data);
       if (response.data.success) {
         if (body.loadMore) {
           setProducts([...Products, ...response.data.productInfo]);

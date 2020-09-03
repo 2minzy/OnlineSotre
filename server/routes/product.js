@@ -19,7 +19,7 @@ let upload = multer({ storage: storage }).single('file');
 
 router.post('/image', (req, res) => {
   // Save brought images
-  upload(req, res, (err) => {
+  upload(req, res, err => {
     if (err) {
       return res.json({ success: false, err });
     }
@@ -34,7 +34,7 @@ router.post('/image', (req, res) => {
 router.post('/', (req, res) => {
   // put the datas we brought in the DB
   const product = new Product(req.body);
-  product.save((err) => {
+  product.save(err => {
     if (err) return res.status(400).json({ success: false, err });
     return res.status(200).json({ success: true });
   });
@@ -90,6 +90,20 @@ router.post('/products', (req, res) => {
         });
       });
   }
+});
+
+router.get('/product_by_id', (req, res) => {
+  // get products with productId in DB
+  // ${productId}와 같이 query를 이용해서 가져올 때는 body가 아닌 query를 이용한다.
+  let type = req.query.type;
+  let productIds = req.query.id;
+
+  Product.find({ _id: productIds })
+    .populate('writer')
+    .exec((err, product) => {
+      if (err) return res.status(400).send(err);
+      return res.status(200).send({ success: true, product });
+    });
 });
 
 module.exports = router;
