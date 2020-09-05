@@ -1,8 +1,13 @@
 import React from 'react';
 import { Button, Descriptions } from 'antd';
-
+import { useDispatch } from 'react-redux';
+import { addToCart } from '../../../../_actions/user_actions';
 function ProductInfo(props) {
-  const clickHandler = () => {};
+  const dispatch = useDispatch();
+  const clickHandler = () => {
+    // put datas(product id, quantity, date) in cart feild
+    dispatch(addToCart(props.datail._id));
+  };
   return (
     <div>
       <Descriptions title='Product Info'>
