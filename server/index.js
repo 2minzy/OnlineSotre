@@ -23,11 +23,11 @@ const connect = mongoose
     useFindAndModify: false,
   })
   .then(() => console.log('MongoDB Connected...'))
-  .catch((err) => console.log(err));
+  .catch(err => console.log(err));
 
 app.use(cors());
 
-//to not get any deprecation warning or error
+// not to get any deprecation warning or error
 //support parsing of application/x-www-form-urlencoded post data
 app.use(bodyParser.urlencoded({ extended: true }));
 //to get json data

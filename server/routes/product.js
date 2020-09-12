@@ -97,11 +97,20 @@ router.get('/product_by_id', (req, res) => {
   let type = req.query.type;
   let productIds = req.query.id;
 
-  Product.find({ _id: productIds })
+  if (type === 'array') {
+    //id=123123123,324234234,324234234 이거를
+    //productIds = ['123123123', '324234234', '324234234'] 이런식으로 바꿔주기
+    let ids = req.query.id.split(',');
+    productIds = ids.map(item => {
+      return item;
+    });
+  }
+
+  Product.find({ _id: { $in: productIds } })
     .populate('writer')
     .exec((err, product) => {
       if (err) return res.status(400).send(err);
-      return res.status(200).send({ success: true, product });
+      return res.status(200).send(product);
     });
 });
 

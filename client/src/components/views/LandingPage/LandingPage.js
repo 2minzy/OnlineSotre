@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FaCode } from 'react-icons/fa';
+// import { FaCode } from 'react-icons/fa';
 import axios from 'axios';
 import Meta from 'antd/lib/card/Meta';
 import { Icon, Col, Card, Row, Carousel } from 'antd';
@@ -27,8 +27,8 @@ function LandingPage() {
     getProducts(body);
   }, []);
 
-  const getProducts = (body) => {
-    axios.post('/api/product/products', body).then((response) => {
+  const getProducts = body => {
+    axios.post('/api/product/products', body).then(response => {
       if (response.data.success) {
         if (body.loadMore) {
           setProducts([...Products, ...response.data.productInfo]);
@@ -70,7 +70,7 @@ function LandingPage() {
     );
   });
 
-  const showFilteredResults = (filters) => {
+  const showFilteredResults = filters => {
     let body = {
       skip: 0,
       limit: Limit,
@@ -80,7 +80,7 @@ function LandingPage() {
     getProducts(body);
     setSkip(0);
   };
-  const handlePrice = (value) => {
+  const handlePrice = value => {
     const data = price;
     let array = [];
     for (let key in data) {
@@ -103,7 +103,7 @@ function LandingPage() {
     setFilters(newFilters);
   };
 
-  const updateSearchTerm = (newSearchTerm) => {
+  const updateSearchTerm = newSearchTerm => {
     setSearchTerm(newSearchTerm);
     let body = {
       skip: 0,
@@ -120,7 +120,7 @@ function LandingPage() {
     <div style={{ width: '75%', margin: '3rem auto' }}>
       <div stlye={{ textAlign: 'center' }}>
         <h2>
-          Let's Travel Anywhere <Icon type="rocket" />
+          Let's Travel Anywhere <Icon type='rocket' />
         </h2>
       </div>
       {/* Filter */}
@@ -129,14 +129,14 @@ function LandingPage() {
           {/* CheckBox */}
           <Checkbox
             list={continents}
-            handleFilters={(filters) => handleFilters(filters, 'continents')}
+            handleFilters={filters => handleFilters(filters, 'continents')}
           />
         </Col>
         <Col lg={12} xs={24}>
           {/* RadioBox */}
           <Radiobox
             list={price}
-            handleFilters={(filters) => handleFilters(filters, 'price')}
+            handleFilters={filters => handleFilters(filters, 'price')}
           />
         </Col>
       </Row>
