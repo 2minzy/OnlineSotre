@@ -10,7 +10,7 @@ function DetailProductPage(props) {
 
   useEffect(() => {
     axios
-      .get(`/api/product/product_by_id?id=${productId}&type=single`)
+      .get(`/api/product/products_by_id?id=${productId}&type=single`)
       .then(response => {
         setProduct(response.data[0]);
       })

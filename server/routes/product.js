@@ -91,7 +91,7 @@ router.post('/products', (req, res) => {
   }
 });
 
-router.get('/product_by_id', (req, res) => {
+router.get('/products_by_id', (req, res) => {
   // get products with productId in DB
   // ${productId}와 같이 query를 이용해서 가져올 때는 body가 아닌 query를 이용한다.
   let type = req.query.type;

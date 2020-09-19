@@ -1,6 +1,5 @@
 import React from 'react';
 import './UserCardBlock.css';
-
 function UserCardBlock(props) {
   const renderCartImage = images => {
     if (images.length > 0) {
@@ -15,7 +14,7 @@ function UserCardBlock(props) {
       <tr key={index}>
         <td>
           <img
-            style={{ width: '80px', height: '60px' }}
+            style={{ width: '70px' }}
             alt='product'
             src={renderCartImage(product.images)}
           />
@@ -27,6 +26,7 @@ function UserCardBlock(props) {
         </td>
       </tr>
     ));
+
   return (
     <div>
       <table>

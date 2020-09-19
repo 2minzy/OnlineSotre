@@ -7,6 +7,7 @@ import {
   ADD_TO_CART,
   GET_CART_ITEMS,
   REMOVE_CART_ITEM,
+  ON_SUCCESS_BUY,
 } from './types';
 import { USER_SERVER } from '../components/Config.js';
 
@@ -71,7 +72,7 @@ export function addToCart(id) {
 
 export function getCartItems(cartItems, userCart) {
   const request = axios
-    .get(`/api/product/product_by_id?id=${cartItems}&type=array`)
+    .get(`/api/product/products_by_id?id=${cartItems}&type=array`)
     .then(response => {
       // CartItems에 해당하는 정보들을 Product Collections에서 가져온 후에
       //Quantity 정보를 넣어준다.
@@ -108,6 +109,17 @@ export function removeCartItem(productId) {
 
   return {
     type: REMOVE_CART_ITEM,
+    payload: request,
+  };
+}
+
+export function onSuccessBuy(data) {
+  const request = axios
+    .post(`/api/users/successBuy`, data)
+    .then(response => response.data);
+
+  return {
+    type: ON_SUCCESS_BUY,
     payload: request,
   };
 }
